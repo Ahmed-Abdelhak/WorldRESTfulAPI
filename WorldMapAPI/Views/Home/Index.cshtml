@@ -1,0 +1,38 @@
+﻿<br/>
+<br/>
+<div>
+    <input id="btn" type="button" value="Get All Countries" />
+    <input id="btnClear" type="button" value="Clear" />
+    <ul id="ulCountries"></ul>
+</div>
+
+@section scripts
+{
+    <script>
+
+        $(document).ready(function() {
+            var ulCountries = $('#ulCountries');
+            $('#btn').click(function() {
+                $.ajax({
+                    type: 'GET',
+                    url: "/api/countries",
+                    dataType: 'json',
+                    async: true,
+                    success: function(data) {
+                        ulCountries.empty();
+                        $.each(data,
+                            function(index, value) {
+                                var ctr = value.id + ' ' + value.name + ' ' + value.cities.map(function(el) {
+                                    return el.name;
+                                });
+                                ulCountries.append('<li>' + ctr + '</li>');
+                            });
+                    }
+                });
+            });
+            $('#btnClear').click(function() {
+                ulCountries.empty();
+            });
+        });
+    </script>
+}
